@@ -9,62 +9,13 @@
 		var refreshInterval;
 		var lastSentTime = 0;
 		var currentTime = new Date();
-		        
+		
 		var listVariablesToSend = (_.isUndefined(currentSettings.variables_to_send) ? "" : currentSettings.variables_to_send).split(",");
 		// Object with keys from list of variables to send, each value is 0
 		var newDataToSend = _.object(listVariablesToSend, _.range(listVariablesToSend.length).map(function () { return 0; }));
 		// Make variables visible to other widgets
 		myName = updateCallback(newDataToSend);
-		
-		// Will receive message from control widget through socket.io
-        // var socket;
-        // var event = "message";
-        // var io = require('socket.io')(9092);
-        
-		// io.on('connection', function (socket) {
-			// console.log("Websocket internal socket connected");
-// 			
-			// socket.on(event, function (msg) {
-				// // Extract variable name from, for example,
-				// // currentSettings.value = [datasources["datasourcename"]["variablename1"], datasources["datasourcename"]["variablename2"]]
-				// var variableName = (_.keys(JSON.parse(msg))[0]).split('"')[3];
-				// var currentObj = {};
-				// currentObj[variableName] = _.values(JSON.parse(msg))[0];
-// 			
-				// // Merge messages to send using jQuery
-				// $.extend(dataObj, currentObj);
-// 				
-				// // Create CRC data
-				// crcValue = 0;
-				// for (var d in dataObj) {
-					// if (d != '_crc') {
-						// if (currentSettings.checksum == "sum") {
-							// crcValue += Number(dataObj[d]);
-						// }
-						// else if (currentSettings.checksum == "concat") {
-							// crcValue += dataObj[d];
-						// }
-					// }
-				// }
-				// $.extend(dataObj, {'_crc':crcValue});
-// 				
-				// // When data arrives (from a slider, for example), send it
-				// // "immediately" (not faster than every 100 ms)
-				// currentTime = new Date();
-				// if ((currentTime - lastSentTime) > 100) {
-					// lastSentTime = currentTime;
-					// sendData(dataObj);
-				// }
-			// });
-// 			
-			// socket.on('disconnect', function () {
-				// console.log("Websocket internal socket disconnected");
-			// });
-			// socket.on('error', function (error) {
-				// console.log("Socket error: ", error);
-			// });
-		// });
-		
+				
 		function onNewMessageHandler(msg) {
 			//console.log("msg: ", msg);
         	newData = JSON.parse(msg.data);
@@ -85,42 +36,24 @@
 		
 		function connectToServer(url) {
 			//ws = new WebSocket(url);
-	        ws = new ReconnectingWebSocket(url);
+			
 	        // See https://github.com/joewalnes/reconnecting-websocket
+	        ws = new ReconnectingWebSocket(url);
 	        ws.reconnectDecay = 1;
 	        ws.timeoutInterval = 15000;
-			
+	        
 			ws.onopen = function() {
 				console.info("Connected to server at: %s", url);
 			};
 			
             ws.onclose = function()
             { 
-            	console.info("Connection is closed..."); 
+            	console.info("Connection is closed...");
             };
+	        
 		}
 
-		function initializeDataSource() {
-			// for (r in refreshIntervals) {
-			    // clearInterval(refreshIntervals[r]);
-			// }
-			// refreshIntervals = [];
-// 			
-			// // When no data is received (slider is not moved, for example),
-			// // send it every second: the receiving program may have a safety timeout
-			// // in case it doesn't receive data
-	        // refreshInterval = setInterval(
-	        	// function(){
-					// // Write data to the serial port
-					// currentTime = new Date();
-					// if ((currentTime - lastSentTime) > 100) {
-						// sendData(dataObj);
-					// }
-	        	// },
-	        	// (_.isUndefined(currentSettings.refresh_rate) ? 1000 : currentSettings.refresh_rate)
-	        // );
-	        // refreshIntervals.push(refreshInterval);
-	        
+		function initializeDataSource() {	        
 			// Reset connection to server
 			discardSocket();
 			connectToServer(currentSettings.host);
@@ -156,27 +89,6 @@
             	listVariablesToSend = (_.isUndefined(newSettings.variables_to_send) ? "" : newSettings.variables_to_send).split(",");
             	newDataToSend = _.object(listVariablesToSend, _.range(listVariablesToSend.length).map(function () { return 0; }));
             }
-            // else if (newSettings.refresh_rate != currentSettings.refresh_rate) {
-				// for (r in refreshIntervals) {
-				    // clearInterval(refreshIntervals[r]);
-				// }
-				// refreshIntervals = [];
-// 				
-				// // When no data is received (slider is not moved, for example),
-				// // send it every second: the receiving program may have a safety timeout
-				// // in case it doesn't receive data
-		        // refreshInterval = setInterval(
-		        	// function(){
-						// // Write data to the serial port
-						// currentTime = new Date();
-						// if ((currentTime - lastSentTime) > 100) {
-							// sendData(dataObj);
-						// }
-		        	// },
-		        	// (_.isUndefined(currentSettings.refresh_rate) ? 1000 : currentSettings.refresh_rate)
-		        // );
-		        // refreshIntervals.push(refreshInterval);
-            // }
             
             currentSettings = newSettings;
 		};
@@ -187,7 +99,7 @@
  		function sendData(data) {
  			//console.log("data: ", JSON.stringify(data));
         	// Send data
-			if (ws.readyState === 1) {
+			if ((!_.isUndefined(ws)) && (ws.readyState === 1)) {
 				ws.send(JSON.stringify(data));
 			}
 		}
@@ -198,8 +110,9 @@
         	for (var i=0; i<listVariablesToSend.length; i++) {
     			item = 'datasources["' + myName + '"]["' + listVariablesToSend[i] + '"]';
     			var sessionStorageVar = sessionStorage.getItem(item);
-    			currentObj[listVariablesToSend[i]] = sessionStorageVar;
-    			//console.log(item);
+    			if (sessionStorageVar != "undefined") {
+	    			currentObj[listVariablesToSend[i]] = sessionStorageVar;
+	    		}
 	        }
 	        
 			// Merge messages to send using jQuery

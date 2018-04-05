@@ -28,72 +28,6 @@
 		// Make variables visible to other widgets
 		myName = updateCallback(newData);
 		
-		// Will receive message from control widget through socket.io
-        // var socket;
-        // var event = "message";
-        // var io = require('socket.io')(9093);
-        
- 		// function sendData(data) {
- 			// console.log("Objet data: ", JSON.stringify(data));
-        	// // Send data
-	        // if (client.isConnected()) {
-	        	// for (var i=0; i<(Object.keys(data)).length; i++) {
-	        		// console.log("Topic: ", listVariablesToSend[i]);
-	 				// console.log("Contenu data: ", data[listVariablesToSend[i]]);
-	        		// if (!_.isUndefined(data[listVariablesToSend[i]])) {
-	        			// console.log("Envoi " + data[listVariablesToSend[i]] + " a " + listVariablesToSend[i]);
-				        // var message = new Paho.MQTT.Message(String(data[listVariablesToSend[i]]));
-				        // message.destinationName = listVariablesToSend[i];
-			        	// client.send(message);
-			        // }
-		        // }
-		    // }
-		// }
-		
-		// io.on('connection', function (socket) {
-			// console.log("Mqtt internal socket connected");
-// 			
-			// socket.on(event, function (msg) {
-				// console.log(msg);
-				// // Extract variable name from, for example,
-				// // currentSettings.value = [datasources["datasourcename"]["variablename1"], datasources["datasourcename"]["variablename2"]]
-				// var variableName = (_.keys(JSON.parse(msg))[0]).split('"')[3];
-				// var currentObj = {};
-				// currentObj[variableName] = _.values(JSON.parse(msg))[0];
-// 			
-				// // Merge messages to send using jQuery
-				// $.extend(dataObj, currentObj);
-// 				
-				// // Create CRC data
-				// crcValue = 0;
-				// for (var d in dataObj) {
-					// if (d != '_crc') {
-						// if (currentSettings.checksum == "sum") {
-							// crcValue += Number(dataObj[d]);
-						// }
-						// else if (currentSettings.checksum == "concat") {
-							// crcValue += dataObj[d];
-						// }
-					// }
-				// }
-				// $.extend(dataObj, {'_crc':crcValue});
-// 				
-				// // When data arrives (from a slider, for example), send it
-				// // "immediately" (not faster than every 100 ms)
-				// currentTime = new Date();
-				// if ((currentTime - lastSentTime) > 100) {
-					// lastSentTime = currentTime;
-					// sendData(dataObj);
-				// }
-			// });
-// 			
-			// socket.on('disconnect', function () {
-				// console.log("Mqtt internal socket disconnected");
-			// });
-			// socket.on('error', function (error) {
-				// console.log("Socket error: ", error);
-			// });
-		// });
 		
 		function onConnect() {
 			console.log("Connected");
@@ -195,7 +129,6 @@
         "description" : "Exchange data with an MQTT server.",
 		"external_scripts" : [
 			"extensions/thirdparty/mqttws31.js",
-			"extensions/thirdparty/socket.io-1.3.5.js"
 		],
 		"settings"    : [
 			{

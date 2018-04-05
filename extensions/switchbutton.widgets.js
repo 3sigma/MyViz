@@ -15,10 +15,20 @@ window.switchbuttonID = 0;
 			// Store message in session storage
 			toSend = {};
 			if (($( "#" + thisswitchbuttonID + "-onoff" )).prop("checked")) {
-				toSend[currentSettings.variable] = currentSettings.yesvalue;
+				if (_.isUndefined(currentSettings.yesvalue)) {
+					toSend[currentSettings.variable] = 1;
+				}
+				else {
+					toSend[currentSettings.variable] = currentSettings.yesvalue;
+				}
 			}
 			else {
-				toSend[currentSettings.variable] = currentSettings.novalue;
+				if (_.isUndefined(currentSettings.novalue)) {
+					toSend[currentSettings.variable] = 0;
+				}
+				else {
+					toSend[currentSettings.variable] = currentSettings.novalue;
+				}
 			}
 			sessionStorage.setItem(currentSettings.variable, toSend[currentSettings.variable]);
  		};
@@ -54,10 +64,6 @@ window.switchbuttonID = 0;
         };
 
         this.onSettingsChanged = function (newSettings) {
-            // if (newSettings.datasourcename != currentSettings.datasourcename) {
-                // discardSocket();
-                // connectToServer(newSettings);
-            // }
 
             if ((newSettings.yestext != currentSettings.yestext)
             	|| (newSettings.notext != currentSettings.notext)) {
@@ -75,7 +81,6 @@ window.switchbuttonID = 0;
         };
 
         this.onDispose = function () {
-			//socket.close();
         };
 
         this.getHeight = function () {
@@ -89,9 +94,6 @@ window.switchbuttonID = 0;
         type_name: "switchbutton",
         display_name: _t("Switch button"),
 		description : _t("A Switchbutton widget for serial, socket or http communications."),
-		// external_scripts: [
-			// "extensions/thirdparty/socket.io-1.3.5.js"
-		// ],
         settings: [
             {
                 name: "title",

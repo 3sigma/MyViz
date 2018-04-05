@@ -35,6 +35,12 @@ window.gaugeID = 0;
                 max: (_.isUndefined(currentSettings.max_value) ? 0 : currentSettings.max_value),
                 label: currentSettings.units,
                 showInnerShadow: false,
+                noGradient: true,
+                levelColors: ["#f9c802"],
+                humanFriendlyDecimal: 2,
+                humanFriendly: true,
+                startAnimationTime: 0,
+                refreshAnimationTime: 0,
                 valueFontColor: "#d3d4d4"
             });
         }
@@ -77,8 +83,8 @@ window.gaugeID = 0;
         type_name: "gauge",
         display_name: _t("Gauge"),
         "external_scripts" : [
-            "extensions/thirdparty/raphael.2.1.0.min.js",
-            "extensions/thirdparty/justgage.1.0.1.js"
+            "extensions/thirdparty/raphael.2.1.4.min.js",
+            "extensions/thirdparty/justgage.1.2.2.js"
         ],
         settings: [
             {

@@ -884,7 +884,7 @@ window.signalgenerationID = 0;
                 name: "frequencymin",
                 display_name: _t("Min for frequency"),
                 type: "number",
-                default_value: -10
+                default_value: 0
             },
             {
                 name: "frequencymax",
@@ -926,31 +926,31 @@ window.signalgenerationID = 0;
                 name: "risingtimeinitialvalue",
                 display_name: _t("Initial value for rising time"),
                 type: "number",
-                default_value: 0
+                default_value: 1
             },
             {
                 name: "risingtimemin",
                 display_name: _t("Min for rising time"),
                 type: "number",
-                default_value: -10
+                default_value: 0
             },
             {
                 name: "risingtimemax",
                 display_name: _t("Max for rising time"),
                 type: "number",
-                default_value: 10
+                default_value: 5
             },
             {
                 name: "risingtimeresolution",
                 display_name: _t("Number of decimals for rising time"),
                 type: "number",
-                default_value: 2
+                default_value: 1
             },
             {
                 name: "risingtimeresetvalue",
                 display_name: _t("Reset value for rising time"),
                 type: "number",
-                default_value: 0
+                default_value: 1
             },
             {
                 name: "risingtimeresetcaption",
@@ -974,19 +974,19 @@ window.signalgenerationID = 0;
                 name: "fallingtimeinitialvalue",
                 display_name: _t("Initial value for falling time"),
                 type: "number",
-                default_value: 0
+                default_value: 1
             },
             {
                 name: "fallingtimemin",
                 display_name: _t("Min for falling time"),
                 type: "number",
-                default_value: -10
+                default_value: 0
             },
             {
                 name: "fallingtimemax",
                 display_name: _t("Max for falling time"),
                 type: "number",
-                default_value: 10
+                default_value: 5
             },
             {
                 name: "fallingtimeresolution",
@@ -998,7 +998,7 @@ window.signalgenerationID = 0;
                 name: "fallingtimeresetvalue",
                 display_name: _t("Reset value for falling time"),
                 type: "number",
-                default_value: 0
+                default_value: 1
             },
             {
                 name: "fallingtimeresetcaption",
@@ -1022,31 +1022,31 @@ window.signalgenerationID = 0;
                 name: "percentageinitialvalue",
                 display_name: _t("Initial value for percentage"),
                 type: "number",
-                default_value: 0
+                default_value: 50
             },
             {
                 name: "percentagemin",
                 display_name: _t("Min for percentage"),
                 type: "number",
-                default_value: -10
+                default_value: 0
             },
             {
                 name: "percentagemax",
                 display_name: _t("Max for percentage"),
                 type: "number",
-                default_value: 10
+                default_value: 100
             },
             {
                 name: "percentageresolution",
                 display_name: _t("Number of decimals for percentage"),
                 type: "number",
-                default_value: 2
+                default_value: 1
             },
             {
                 name: "percentageresetvalue",
                 display_name: _t("Reset value for percentage"),
                 type: "number",
-                default_value: 0
+                default_value: 50
             },
             {
                 name: "percentageresetcaption",
@@ -1071,31 +1071,31 @@ window.signalgenerationID = 0;
                 name: "widthinitialvalue",
                 display_name: _t("Initial value for width"),
                 type: "number",
-                default_value: 0
+                default_value: 1
             },
             {
                 name: "widthmin",
                 display_name: _t("Min for width"),
                 type: "number",
-                default_value: -10
+                default_value: 0
             },
             {
                 name: "widthmax",
                 display_name: _t("Max for width"),
                 type: "number",
-                default_value: 10
+                default_value: 5
             },
             {
                 name: "widthresolution",
                 display_name: _t("Number of decimals for width"),
                 type: "number",
-                default_value: 2
+                default_value: 1
             },
             {
                 name: "widthresetvalue",
                 display_name: _t("Reset value for width"),
                 type: "number",
-                default_value: 0
+                default_value: 1
             },
             {
                 name: "widthresetcaption",
