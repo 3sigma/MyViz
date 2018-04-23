@@ -14,6 +14,9 @@
     <script src="lang/t.js"></script>
 	<script type="text/javascript">
 		var theme = "dark";
+		var startup = "default";
+		var startup_last = "dashboard_osinfos.json";
+		var startup_custom = "dashboard_osinfos.json";
 		localStorage.clear();
 	    if (typeof(require) !== "undefined") {
 			var fs = require('fs');
@@ -34,7 +37,10 @@
 					var mySettings = {
 					    "language": "en",
 					    "theme": "dark",
-					    "lastdir": ""
+					    "lastdir": "",
+					    "startup": "default",
+					    "startup_last": "dashboard_osinfos.json",
+					    "startup_custom": "dashboard_osinfos.json"					    
 					};
 				    fs.writeFile(filePath, JSON.stringify(mySettings), function (err) {
 				        if (err) {
@@ -52,6 +58,9 @@
 		            // console.log(readSettings.theme);
 		            // console.log(readSettings.lastdir);
 		            theme = readSettings.theme;
+		            startup = readSettings.startup;
+		            startup_last = readSettings.startup_last;
+		            startup_custom = readSettings.startup_custom;
 		            mySettings = readSettings;
 		            if (theme == "light") {
 		            	$('head').append('<link href="css/freeboard_light.css" rel="stylesheet" />');
@@ -122,7 +131,10 @@
 			var mySettings = {
 			    "language": "en",
 			    "theme": "dark",
-			    "lastdir": ""
+			    "lastdir": "",
+			    "startup": "default",
+			    "startup_last": "dashboard_osinfos.json",
+			    "startup_custom": "dashboard_osinfos.json"					    
 			};
 		    
 			
@@ -227,7 +239,33 @@
 												//console.log(process.cwd());
 												//var filePath = "file:///" + process.cwd() + "/dashboard_osinfos_mini.json";
 												//console.log(filePath);
-												var jsonText = fs.readFileSync('dashboard_osinfos.json');
+												if ((startup == "last") && (startup_last != undefined)) {
+												    try {
+												    	var jsonText = fs.readFileSync(startup_last);
+														document.title = "MyViz - " + startup_last;
+													}
+													catch(e) {
+														var jsonText = fs.readFileSync('dashboard_osinfos.json');
+														document.title = "MyViz - " + 'dashboard_osinfos.json';
+													}
+												}
+												else if ((startup == "custom") && (startup_custom != undefined)) {
+												    try {
+														var jsonText = fs.readFileSync(startup_custom);
+														startup_last = startup_custom;
+														item_Parameter_Startup_Last.label = _t("Last opened: ") + startup_last;
+														document.title = "MyViz - " + startup_custom;
+													}
+													catch(e) {
+														var jsonText = fs.readFileSync('dashboard_osinfos.json');
+														document.title = "MyViz - " + 'dashboard_osinfos.json';
+													}
+												}
+										  		else { // startup == "default"
+													var jsonText = fs.readFileSync('dashboard_osinfos.json');
+													startup_last = "dashboard_osinfos.json";
+													item_Parameter_Startup_Last.label = _t("Last opened: ") + startup_last;
+												}
 												var jsonObject = JSON.parse(jsonText);
 												freeboard.loadDashboard(jsonObject);
 												freeboard.setEditing(false);
@@ -339,40 +377,130 @@
 							
 							menu.append(item_File);
 							
-							// View menu
-							item_View_Theme_Dark = new gui.MenuItem({
-							  	label: _t("Dark"),
+							// Parameter startupmenu
+							item_Parameter_Startup_Default = new gui.MenuItem({
+								type: 'checkbox',
+							  	label: _t("Default (OS informations)"),
+							  	checked: (startup == "default"),
 							  	click: function() {
+							  		item_Parameter_Startup_Default.checked = true; // Force to be true ; otherwise the checkbox toggles
+							  		item_Parameter_Startup_Last.checked = false;
+							  		item_Parameter_Startup_Custom.checked = false;
+									saveSetting("startup","default", function () {
+									    alert(_t("The modification will be applied at the next startup of MyViz"));
+									});
+							  	}
+							});							
+							item_Parameter_Startup_Last = new gui.MenuItem({
+								type: 'checkbox',
+							  	label: _t("Last opened: ") + startup_last,
+							  	checked: (startup == "last"),
+							  	click: function() {
+							  		item_Parameter_Startup_Last.checked = true; // Force to be true ; otherwise the checkbox toggles
+							  		item_Parameter_Startup_Default.checked = false;
+							  		item_Parameter_Startup_Custom.checked = false;
+									saveSetting("startup","last", function () {
+									    alert(_t("The modification will be applied at the next startup of MyViz"));
+									});
+							  	}
+							});							
+							item_Parameter_Startup_Custom = new gui.MenuItem({
+								type: 'checkbox',
+							  	label: _t("Custom (click to edit): ") + startup_custom,
+							  	checked: (startup == "custom"),
+							  	click: function() {
+							  		item_Parameter_Startup_Custom.checked = true; // Force to be true ; otherwise the checkbox toggles
+							  		item_Parameter_Startup_Default.checked = false;
+							  		item_Parameter_Startup_Last.checked = false;
+							  		
+									// Check for the various File API support.
+									if(window.File && window.FileReader && window.FileList && window.Blob)
+									{
+										var input = document.createElement('input');
+										input.type = "file";
+										$(input).on("change", function(event)
+										{
+											var files = event.target.files;
+							
+											if(files && files.length > 0)
+											{
+												var file = files[0];
+												var reader = new FileReader();
+												dashboardFile = file.name;
+												
+												startup_custom = file.path;
+												item_Parameter_Startup_Custom.label = _t("Custom (click to edit): ") + startup_custom;
+												saveSetting("startup_custom",startup_custom, function () {
+													saveSetting("startup","custom", function () {
+													    alert(_t("The modification will be applied at the next startup of MyViz"));
+													});
+												});
+											}
+							
+										});
+										$(input).trigger("click");
+									}
+									else
+									{
+										alert('Unable to load a file in this browser.');
+									}
+									
+							  	}
+							});							
+							var submenu_Parameter_Startup = new gui.Menu();
+							submenu_Parameter_Startup.append(item_Parameter_Startup_Default);
+							submenu_Parameter_Startup.append(item_Parameter_Startup_Last);
+							submenu_Parameter_Startup.append(item_Parameter_Startup_Custom);
+							
+							item_Parameter_Startup = new gui.MenuItem({
+							  	label: _t("Startup")
+							});
+							item_Parameter_Startup.submenu = submenu_Parameter_Startup;
+							
+							// Parameter view menu
+							item_Parameter_Theme_Dark = new gui.MenuItem({
+								type: 'checkbox',
+							  	label: _t("Dark"),
+							  	checked: (theme == "dark"),
+							  	click: function() {
+							  		item_Parameter_Theme_Dark.checked = true; // Force to be true ; otherwise the checkbox toggles
+							  		item_Parameter_Theme_Light.checked = false;
 									saveSetting("theme","dark", function () {
 									    alert(_t("The modification will be applied at the next startup of MyViz"));
 									});
 							  	}
 							});							
-							item_View_Theme_Light = new gui.MenuItem({
+							item_Parameter_Theme_Light = new gui.MenuItem({
+								type: 'checkbox',
 							  	label: _t("Light"),
+							  	checked: (theme == "light"),
 							  	click: function() {
+							  		item_Parameter_Theme_Light.checked = true; // Force to be true ; otherwise the checkbox toggles
+							  		item_Parameter_Theme_Dark.checked = false;
 									saveSetting("theme","light", function () {
 									    alert(_t("The modification will be applied at the next startup of MyViz"));
 									});
 							  	}
 							});							
-							var submenu_View_Theme = new gui.Menu();
-							submenu_View_Theme.append(item_View_Theme_Dark);
-							submenu_View_Theme.append(item_View_Theme_Light);
+							var submenu_Parameter_Theme = new gui.Menu();
+							submenu_Parameter_Theme.append(item_Parameter_Theme_Dark);
+							submenu_Parameter_Theme.append(item_Parameter_Theme_Light);
 							
-							item_View_Theme = new gui.MenuItem({
+							item_Parameter_Theme = new gui.MenuItem({
 							  	label: _t("Theme")
 							});
-							item_View_Theme.submenu = submenu_View_Theme;
+							item_Parameter_Theme.submenu = submenu_Parameter_Theme;
 							
-							var submenu_View = new gui.Menu();							
-							submenu_View.append(item_View_Theme);
-							item_View = new gui.MenuItem({
-							  	label: _t("View")
+							// Parameters menu
+							var submenu_Parameter = new gui.Menu();							
+							submenu_Parameter.append(item_Parameter_Startup);
+							submenu_Parameter.append(item_Parameter_Theme);
+							item_Parameter = new gui.MenuItem({
+							  	label: _t("Parameters")
 							});
-							item_View.submenu = submenu_View;
-							menu.append(item_View);
-							
+							item_Parameter.submenu = submenu_Parameter;
+							menu.append(item_Parameter);
+														
 							// Systems menu
 							var submenu_Systems_Robots_Tquad = new gui.Menu();							
 							item_Systems_Robots_Tquad_Load = new gui.MenuItem({

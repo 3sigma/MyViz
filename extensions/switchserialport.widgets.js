@@ -18,12 +18,18 @@ window.switchserialportID = 0;
         	alert("Problem with switch serial port widget: datasource " + currentSettings.serialport + " is not a serial port");
         }
         
+ 		function sendData() {
+			sessionStorage.setItem(currentSettings.variable, currentSettings.value);
+ 		};
+ 		
         function createSwitchSerialPort(mySettings) {
             if (!rendered) {
                 return;
             }
             
             switchserialportElement.empty();
+            
+            sendData();
             
             var style = (_.isUndefined(mySettings.style) ? "switch" : mySettings.style);
             // console.log(style);
@@ -126,7 +132,19 @@ window.switchserialportID = 0;
                 display_name: _t("Initial state"),
                 type: "boolean",
                 default_value: false
-            }
+            },
+            {
+                name: "variable",
+                display_name: _t("Variable"),
+                type: "calculated",
+				description: _t("(Optional) Variable to send when the serial port is switched on")
+            },
+            {
+                name: "value",
+                display_name: _t('Value'),
+                type: "text",
+                description: _t('Value to send when the variable is defined above')
+            },
         ],
         newInstance: function (settings, newInstanceCallback) {
             newInstanceCallback(new switchserialportWidget(settings));

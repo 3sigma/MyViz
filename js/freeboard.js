@@ -532,6 +532,12 @@ function FreeboardModel(datasourcePlugins, widgetPlugins, freeboardUI)
 					var file = files[0];
 					var reader = new FileReader();
 					dashboardFile = file.name;
+					
+					startup_last = file.path;
+					item_Parameter_Startup_Last.label = _t("Last opened: ") + startup_last;
+					saveSetting("startup_last",startup_last, function () {
+					});
+					
 					document.title = "MyViz - " + dashboardFile;
 
 					reader.addEventListener("load", function(fileReaderEvent)

@@ -1,6 +1,6 @@
 var translations = [];
 
-// Menu
+// Menus
 translations["File"] = "Fichier";
 translations["New"] = "Nouveau";
 translations["Open"] = "Ouvrir";
@@ -15,6 +15,12 @@ translations["Load"] = "Ouvrir";
 translations["About T-Quad"] = "A propos de T-Quad";
 translations["Help"] = "Aide";
 translations["About MyViz"] = "A propos de Myviz";
+translations["Tutorials"] = "Tutoriels";
+translations["Last opened: "] = "Dernier fichier ouvert: ";
+translations["Default (OS informations)"] = "Par défaut (informations de l'OS)";
+translations["Custom (click to edit): "] = "Personnalisé (cliquer pour modifier): ";
+translations["Startup"] = "Démarrage";
+translations["Parameters"] = "Paramètres";
 translations["Tutorials"] = "Tutoriels";
 
 
@@ -408,6 +414,10 @@ translations["Datasource name corresponding to the serial port to switch. You *m
 translations['"ON" text'] = 'Texte correspondant à "ON"';
 translations['"OFF" text'] = 'Texte correspondant à "OFF"';
 translations["Initial state"] = "Etat initial";
+translations["Variable"] = "Variable";
+translations["(Optional) Variable to send when the serial port is switched on"] = "(Optionnel) Variable à envoyer quand le port série est ouvert";
+translations["Value"] = "Valeur";
+translations["Value to send when the variable is defined above"] = "Valeur à envoyer quand la variable est définie ci-dessus";
 
 // extensions/text.widgets.js
 translations["Text"] = "Texte";
