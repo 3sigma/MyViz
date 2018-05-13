@@ -514,6 +514,7 @@ function FreeboardModel(datasourcePlugins, widgetPlugins, freeboardUI)
 
         freeboard.emit("dashboard_loaded");
 		});
+		
 	};
 
 	this.loadDashboardFromLocalFile = function()
@@ -581,6 +582,7 @@ function FreeboardModel(datasourcePlugins, widgetPlugins, freeboardUI)
 	{
 	    var file = 'my-settings-file.json';
 	    var filePath = path.join(gui.App.dataPath, file);
+	    
 		fs.readFile(filePath, function(err, data) {
 	        if (err) {
 	            console.info("There was an error attempting to read your data.");
@@ -621,6 +623,11 @@ function FreeboardModel(datasourcePlugins, widgetPlugins, freeboardUI)
 			            else {
 			            	dashboardFile = node.value;
 			            	document.title = "MyViz - " + dashboardFile;
+			            	
+							startup_last = dashboardFile;
+							item_Parameter_Startup_Last.label = _t("Last opened: ") + startup_last;
+							saveSetting("startup_last",startup_last, function () {
+							});
 			            }
 		 				node.remove();
 		       		});
@@ -765,6 +772,9 @@ function FreeboardModel(datasourcePlugins, widgetPlugins, freeboardUI)
 	{
 		var editing = !self.isEditing();
 		self.setEditing(editing);
+		if ((editing) && (document.title[(document.title).length-1] != '*')) {
+			document.title = document.title + " *";
+		}
 	};
 }
 
@@ -1869,10 +1879,30 @@ PluginEditor = function(jsEditor, valueEditor)
 
 			typeSelect.append($(_t("<option>Select a type...</option>")).attr("value", "undefined"));
 
-			_.each(pluginTypes, function(pluginType)
-			{
-				typeSelect.append($("<option></option>").text(pluginType.display_name).attr("value", pluginType.type_name));
-			});
+			// We don't use this anymore...
+			// _.each(pluginTypes, function(pluginType)
+			// {
+				// typeSelect.append($("<option></option>").text(pluginType.display_name).attr("value", pluginType.type_name));
+			// });
+			// ... because we want to have the list sorted, depending on the language used
+			
+			// First create the array of keys/net_total so that we can sort it:
+			var sort_array = [];
+			for (var key in pluginTypes) {
+			    sort_array.push({key:key, display_name:pluginTypes[key].display_name});
+			}
+			// Now sort it:
+			sort_array.sort(function(x,y){return x.display_name.localeCompare(y.display_name);});
+			
+			// Now process that object with it:
+			for (var i=0; i<sort_array.length; i++) {
+			    var item = pluginTypes[sort_array[i].key];
+			
+			    // now do stuff with each item
+				typeSelect.append($("<option></option>").text(item.display_name).attr("value", item.type_name));
+			}
+			
+			
 
 			typeSelect.change(function()
 			{

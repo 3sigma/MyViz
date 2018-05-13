@@ -242,6 +242,7 @@
 												if ((startup == "last") && (startup_last != undefined)) {
 												    try {
 												    	var jsonText = fs.readFileSync(startup_last);
+												    	dashboardFile = startup_last;
 														document.title = "MyViz - " + startup_last;
 													}
 													catch(e) {

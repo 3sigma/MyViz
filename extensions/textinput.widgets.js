@@ -32,7 +32,6 @@ window.textinputID = 0;
                 return;
             }
             
-            
             //textinputElement.empty();
         
             textinput = document.getElementById('textinput-' + thistextinputID);
@@ -48,7 +47,13 @@ window.textinputID = 0;
 			});
 			
 			textinputInput.addEventListener('change', function(){
-				textinputValue =this.value;
+				if ($.isNumeric(this.value)) {
+					this.value = Math.min(mySettings.max,Math.max(mySettings.min, this.value));
+					textinputValue =this.value;
+				}
+				else {
+					textinputValue =this.value;
+				}
 				sendData();
 			});
 	        
@@ -63,6 +68,8 @@ window.textinputID = 0;
         this.onSettingsChanged = function (newSettings) {
 
             if (newSettings.initialvalue != currentSettings.initialvalue 
+            	|| newSettings.min != currentSettings.min 
+            	|| newSettings.max != currentSettings.max 
             	|| newSettings.resetcaption != currentSettings.resetcaption 
             	|| newSettings.formula != currentSettings.formula 
             	|| newSettings.resetvalue != currentSettings.resetvalue) {
@@ -96,6 +103,8 @@ window.textinputID = 0;
         };
 
         this.onSettingsChanged(settings);
+        
+        sendData();
     };
 
     freeboard.loadWidgetPlugin({
@@ -126,6 +135,18 @@ window.textinputID = 0;
                 display_name: _t("Initial value"),
                 type: "text",
                 default_value: 0
+            },
+            {
+                name: "min",
+                display_name: _t("Min"),
+                type: "number",
+                default_value: -10
+            },
+            {
+                name: "max",
+                display_name: _t("Max"),
+                type: "number",
+                default_value: 10
             },
             {
                 name: "resetvalue",

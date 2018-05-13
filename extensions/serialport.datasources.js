@@ -273,7 +273,7 @@
 			crcValue = 0;
 			for (var d in dataObj) {
 				if (d != '_crc') {
-					if (currentSettings.checksum == "sum") {
+					if ((currentSettings.checksum == "sum") || (currentSettings.checksum == "sumtwice")) {
 						crcValue += Number(dataObj[d]);
 					}
 					else if (currentSettings.checksum == "concat") {
@@ -291,6 +291,9 @@
 			if (currentSettings.checksum == "none") {
 				// Remove last separator
 				dataToSend = dataToSend.slice(0,-(currentSettings.separator).length);
+			}
+			else if (currentSettings.checksum == "sumtwice") {
+				dataToSend += crcValue + currentSettings.separator + crcValue;
 			}
 			else {
 				dataToSend += crcValue;
@@ -399,6 +402,10 @@
                     {
                         name: _t("Sum"),
                         value: "sum"
+                    },
+                    {
+                        name: _t("Sum, twice"),
+                        value: "sumtwice"
                     },
                     {
                         name: _t("String concatenation"),

@@ -12,8 +12,6 @@ window.dynamicsliderID = 0;
 
 		var dynamicslider;
         var currentSettings = settings;
-        // var socket;
-        // var event;
         var initialValue = 0;
         var minRange = 0;
         var maxRange = 10;
@@ -23,63 +21,11 @@ window.dynamicsliderID = 0;
         var dynamicsliderValue = currentSettings.resetvalue;
         var resetValue = dynamicsliderValue;
         
-		// function discardSocket() {
-			// // Disconnect datasource websocket
-			// if (socket) {
-				// socket.disconnect();
-			// }
-		// }
-		
-		// function connectToServer(mySettings) {
-	        // // If the communication is on serial port, the event name is the serial port name,
-	        // // otherwise it is 'message'
-// 	        
-        	// // Get the type (serial port or socket) and the settings
-        	// var hostDatasourceType = freeboard.getDatasourceType(mySettings.datasourcename);
-        	// var hostDatasourceSettings = freeboard.getDatasourceSettings(mySettings.datasourcename);
-// 	        	
-	        // if (hostDatasourceType == "serialport") {
-	        	// // Get the name of serial port (on Linux based OS, take the name after the last /)
-	        	// event = (hostDatasourceSettings.port).split("/").pop();
-	        	// var host = "http://127.0.0.1:9091/";
-	        // }
-	        // else if (hostDatasourceType == "websocket") {
-	        	// // Type = socket
-	        	// event = 'message';
-	        	// var host = "http://127.0.0.1:9092/";
-	        // }
-	        // else {
-	        	// alert(_t("Datasource type not supported by this widget"));
-	        // }
-// 	        
-            // socket = io.connect(host,{'forceNew':true});
-// 	        			
-			// // Events
-			// socket.on('connect', function() {
-				// console.info("Connecting to server at: %s", host);
-			// });
-// 			
-			// socket.on('connect_error', function(object) {
-				// console.error("It was not possible to connect to server at: %s", host);
-			// });
-// 			
-			// socket.on('reconnect_error', function(object) {
-				// console.error("Still was not possible to re-connect to server at: %s", host);
-			// });
-// 			
-			// socket.on('reconnect_failed', function(object) {
-				// console.error("Re-connection to server failed at: %s", host);
-				// discardSocket();
-			// });
-// 			
-		// }
-
  		function sendData() {
 			// Store message in session storage
 			toSend = {};
 			var formula = (_.isUndefined(currentSettings.formula) ? "x" : currentSettings.formula);
 			toSend[currentSettings.variable] = eval(formula.replace("x", dynamicsliderValue));
-			//socket.emit(event, JSON.stringify(toSend));
 			sessionStorage.setItem(currentSettings.variable, toSend[currentSettings.variable]);
  		};
  		        
@@ -87,8 +33,6 @@ window.dynamicsliderID = 0;
             if (!rendered) {
                 return;
             }
-            
-            //connectToServer(mySettings);
             
             dynamicsliderElement.empty();
         
@@ -155,17 +99,12 @@ window.dynamicsliderID = 0;
         };
 
         this.onSettingsChanged = function (newSettings) {
-            // if (newSettings.datasourcename != currentSettings.datasourcename) {
-                // discardSocket();
-                // connectToServer(newSettings);
-            // }
-
             if (newSettings.resolution != currentSettings.resolution 
             	|| newSettings.resetcaption != currentSettings.resetcaption 
             	|| newSettings.formula != currentSettings.formula) {
             		
                 
-                if (!_.isUndefined(dynamicslider)) {
+                if (!_.isUndefined(dynamicslider.noUiSlider)) {
                 	dynamicslider.noUiSlider.destroy();
                 }
                 createDynamicSlider(newSettings);
@@ -186,7 +125,7 @@ window.dynamicsliderID = 0;
             if (settingName == "initialvalue") {
             	initialValue = newValue;
 				if (previousInitialValue != initialValue) {
-	                if (!_.isUndefined(dynamicslider)) {
+	                if (!_.isUndefined(dynamicslider.noUiSlider)) {
 	                	dynamicslider.noUiSlider.destroy();
 	                }
 	                createDynamicSlider(currentSettings);
@@ -202,7 +141,7 @@ window.dynamicsliderID = 0;
 					// }
 				// });
 				if (previousMinRange != minRange) {
-	                if (!_.isUndefined(dynamicslider)) {
+	                if (!_.isUndefined(dynamicslider.noUiSlider)) {
 	                	dynamicslider.noUiSlider.destroy();
 	                }
 	                createDynamicSlider(currentSettings);
@@ -212,7 +151,7 @@ window.dynamicsliderID = 0;
             if (settingName == "max") {
             	maxRange = newValue;
 				if (previousMaxRange != maxRange) {
-	                if (!_.isUndefined(dynamicslider)) {
+	                if (!_.isUndefined(dynamicslider.noUiSlider)) {
 	                	dynamicslider.noUiSlider.destroy();
 	                }
 	                createDynamicSlider(currentSettings);
@@ -225,7 +164,6 @@ window.dynamicsliderID = 0;
         };
 
         this.onDispose = function () {
-			//socket.close();
         };
 
         this.getHeight = function () {
@@ -244,7 +182,6 @@ window.dynamicsliderID = 0;
 		description : _t("A Slider widget with dynamic parameters for serial or socket communications."),
 		external_scripts: [
 			"extensions/thirdparty/nouislider.min.js",
-			//"extensions/thirdparty/socket.io-1.3.5.js",
 			"extensions/thirdparty/wNumb.min.js"
 		],
         settings: [

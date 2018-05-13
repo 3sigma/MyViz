@@ -18,8 +18,9 @@ window.gaugeID = 0;
 
         var gaugeObject;
         var rendered = false;
-
         var currentSettings = settings;
+
+        var gradient = _.isUndefined(currentSettings.gradient) ? true : false;
 
         function createGauge() {
             if (!rendered) {
@@ -28,21 +29,38 @@ window.gaugeID = 0;
 
             gaugeElement.empty();
 
-            gaugeObject = new JustGage({
-                id: thisGaugeID,
-                value: (_.isUndefined(currentSettings.min_value) ? 0 : currentSettings.min_value),
-                min: (_.isUndefined(currentSettings.min_value) ? 0 : currentSettings.min_value),
-                max: (_.isUndefined(currentSettings.max_value) ? 0 : currentSettings.max_value),
-                label: currentSettings.units,
-                showInnerShadow: false,
-                noGradient: true,
-                levelColors: ["#f9c802"],
-                humanFriendlyDecimal: 2,
-                humanFriendly: true,
-                startAnimationTime: 0,
-                refreshAnimationTime: 0,
-                valueFontColor: "#d3d4d4"
-            });
+			if (!gradient) {
+				// Without gradient
+	            gaugeObject = new JustGage({
+	                id: thisGaugeID,
+	                value: (_.isUndefined(currentSettings.min_value) ? 0 : currentSettings.min_value),
+	                min: (_.isUndefined(currentSettings.min_value) ? 0 : currentSettings.min_value),
+	                max: (_.isUndefined(currentSettings.max_value) ? 0 : currentSettings.max_value),
+	                label: currentSettings.units,
+	                showInnerShadow: false,
+	                noGradient: true,
+	                levelColors: ["#f9c802"],
+	                humanFriendlyDecimal: 2,
+	                humanFriendly: true,
+	                startAnimationTime: 0,
+	                refreshAnimationTime: 0,
+	                valueFontColor: "#d3d4d4"
+	            });
+			}
+			else {
+				// With gradient
+	            gaugeObject = new JustGage({
+	                id: thisGaugeID,
+	                value: (_.isUndefined(currentSettings.min_value) ? 0 : currentSettings.min_value),
+	                min: (_.isUndefined(currentSettings.min_value) ? 0 : currentSettings.min_value),
+	                max: (_.isUndefined(currentSettings.max_value) ? 0 : currentSettings.max_value),
+	                label: currentSettings.units,
+	                showInnerShadow: false,
+	                humanFriendlyDecimal: 2,
+	                humanFriendly: true,
+	                valueFontColor: "#d3d4d4"
+	            });
+			}
         }
 
         this.render = function (element) {
@@ -52,8 +70,12 @@ window.gaugeID = 0;
         };
 
         this.onSettingsChanged = function (newSettings) {
-            if (newSettings.min_value != currentSettings.min_value || newSettings.max_value != currentSettings.max_value || newSettings.units != currentSettings.units) {
+            if (newSettings.min_value != currentSettings.min_value
+            	 || newSettings.max_value != currentSettings.max_value
+            	 || newSettings.units != currentSettings.units
+            	 || newSettings.gradient != currentSettings.gradient) {
                 currentSettings = newSettings;
+                gradient = newSettings.gradient;
                 createGauge();
             }
             else {
@@ -113,6 +135,12 @@ window.gaugeID = 0;
                 display_name: _t("Maximum"),
                 type: "text",
                 default_value: 100
+            },
+            {
+                name: "gradient",
+                display_name: _t("Gradient"),
+				type: "boolean",
+                default_value: true
             }
         ],
         newInstance: function (settings, newInstanceCallback) {

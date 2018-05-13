@@ -110,6 +110,7 @@ translations["Value"] = "Valeur";
 translations["Units"] = "Unité";
 translations["Minimum"] = "Minimum";
 translations["Maximum"] = "Maximum";
+translations["Gradient"] = "Gradient";
 
 // extensions/googlemap.widgets.js
 translations["Latitude"] = "Latitude";
@@ -278,12 +279,14 @@ translations["Checksum method"] = 'Méthode de "somme de contrôle"';
 translations["If values are sent, a checksum will be automatically added in variable '_crc', computed from the other values."] = 'Si des données sont envoyées, une "somme de contrôle" sera automatiquement ajoutée dans une variable "_crc", calculée à partir des autres valeurs';
 translations["None"] = "Aucune";
 translations["Sum"] = "Somme";
+translations["Sum, twice"] = "Somme, deux fois de suite";
 translations["String concatenation"] = "Concaténation de chaîne de caractères";
 translations["Immediate startup"] = "Démarrage immédiat";
 translations["Define whether or not you want to start the communication when the dashboard is loaded."] = "Permet de définir si vous souhaitez ou non démarrer la communication lors de l'ouverture du tableau de bord.";
 
 // extensions/signalgeneration.widgets.js
 translations["Pulse"] = "Impulsion";
+translations["Unit"] = "Unité";
 translations["Sine"] = "Sinus";
 translations["Trapezoid"] = "Trapèze";
 translations["Triangle"] = "Triangle";
@@ -445,6 +448,14 @@ translations["Empty for unlimited"] = "Laisser vide si le nombre est limité";
 translations["Value"] = "Valeur";
 translations["Initially active"] = "Initialement actif";
 translations['"No" means that it is initially in "Pause" mode.'] = '"Non" signifie que le composant est initialement dans le mode "Pause"';
+
+// extensions/textdouble.widgets.js
+translations["Double Text"] = "Texte double";
+
+// extensions/textinput.widgets.js
+translations["Text Input"] = "Entrée textuelle";
+translations["A Text Input widget for serial, socket or http communications."] = "Contrôle de type entrée textuelle pour les communications série, http ou socket";
+translations['The value really sent will be computed from the textinput value. <br />Use "x" as textinput value'] = "La valeur réellement envoyée sera calculée à partir de la valeur de l'entrée textuelle. <br />Utiliser 'x' comme valeur de cette entrée";
 
 // extensions/websocket.datasources.js
 translations["A real-time stream datasource from Websocket servers."] = "Flux de données temps-réel provenant d'un serveur de Websocket.";

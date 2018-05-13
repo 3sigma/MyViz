@@ -706,8 +706,10 @@ window.signalgenerationID = 0;
 
 			currentSettings = newSettings;
             titleSelectElement.html(_t("Signal type"));
-            titleSliderOffsetElement.html(_t("Offset"));
-            titleSliderAmplitudeElement.html(_t("Amplitude"));
+            Unit = _.isUndefined(currentSettings.unit) ? "" : " (" + currentSettings.unit + ")";
+            Unit2 = _.isUndefined(currentSettings.unit2) ? "" : " (" + currentSettings.unit2 + ")";
+            titleSliderOffsetElement.html(_t("Offset") + Unit);
+            titleSliderAmplitudeElement.html(_t("Amplitude") + Unit2);
             titleSliderFrequencyElement.html(_t("Frequency (Hz)"));
             titleSliderRisingTimeElement.html(_t("Rising time (s)"));
             titleSliderFallingTimeElement.html(_t("Falling time (s)"));
@@ -773,6 +775,11 @@ window.signalgenerationID = 0;
                 type: "calculated",
             },
             {
+                name: "unit",
+                display_name: _t("Unit"),
+                type: "text",
+            },
+            {
                 name: "offsetformula",
                 display_name: _t("Formula for offset"),
                 type: "text",
@@ -819,6 +826,11 @@ window.signalgenerationID = 0;
                 name: "amplitudevariable",
                 display_name: _t("Variable for amplitude"),
                 type: "calculated",
+            },
+            {
+                name: "unit2",
+                display_name: _t("Unit"),
+                type: "text",
             },
             {
                 name: "amplitudeformula",
