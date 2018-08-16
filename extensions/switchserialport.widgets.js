@@ -53,15 +53,27 @@ window.switchserialportID = 0;
         var currentSettings = settings;
         var messageValue = "";
         var previousMessageValue = messageValue;
-        
-        // The datasource must be a serial port
-        if (freeboard.getDatasourceType(currentSettings.serialport) !== "serialport") {
-        	alert("Problem with switch serial port widget: datasource " + currentSettings.serialport + " is not a serial port");
+        var arraySerialPort = (currentSettings.serialport).split(",");
+        //console.log(arraySerialPort);
+        for (var i = 0; i < arraySerialPort.length; i++) {
+        	tabSwitchSerialPort[arraySerialPort[i]] = -1;
         }
         
- 		function sendData() {
+        // The datasource must be a serial port
+        for (var i = 0; i < arraySerialPort.length; i++) {
+	        if (freeboard.getDatasourceType(arraySerialPort[i]) !== "serialport") {
+	        	alert("Problem with switch serial port widget: datasource " + arraySerialPort[i] + " is not a serial port");
+	        }
+	    }
+        
+ 		function sendDataOn() {
 			sessionStorage.setItem(currentSettings.variable1, currentSettings.value1);
 			sessionStorage.setItem(currentSettings.variable2, currentSettings.value2);
+ 		};
+ 		
+ 		function sendDataOff() {
+			sessionStorage.setItem(currentSettings.switchoff_variable1, currentSettings.switchoff_value1);
+			sessionStorage.setItem(currentSettings.switchoff_variable2, currentSettings.switchoff_value2);
  		};
  		
         function createSwitchSerialPort(mySettings) {
@@ -71,7 +83,7 @@ window.switchserialportID = 0;
             
             switchserialportElement.empty();
             
-            sendData();
+            sendDataOff();
             
             var style = (_.isUndefined(mySettings.style) ? "switch" : mySettings.style);
             // console.log(style);
@@ -87,11 +99,15 @@ window.switchserialportID = 0;
             document.getElementById('switchserialport-' + thisswitchserialportID).innerHTML = switchserialportElementStr;
             
 			$( "#" + thisswitchserialportID + "-serialportonoff" ).change(function() {
-				if (($( "#" + thisswitchserialportID + "-serialportonoff" )).prop("checked")) {
-					tabSwitchSerialPort[currentSettings.serialport] = 1;
-				}
-				else {
-					tabSwitchSerialPort[currentSettings.serialport] = -1;
+				for (var i = 0; i < arraySerialPort.length; i++) {				
+					if (($( "#" + thisswitchserialportID + "-serialportonoff" )).prop("checked")) {
+						tabSwitchSerialPort[arraySerialPort[i]] = 1;
+						sendDataOn();
+					}
+					else {
+						tabSwitchSerialPort[arraySerialPort[i]] = -1;
+						sendDataOff();
+					}
 				}
 			});
         }
@@ -122,6 +138,10 @@ window.switchserialportID = 0;
                 createSwitchSerialPort(newSettings);
             }
             
+            if (newSettings.serialport != currentSettings.serialport) {
+            	arraySerialPort = (newSettings.serialport).split(",");
+            }
+            
 			currentSettings = newSettings;
             titleElement.html(currentSettings.title);
         };
@@ -137,7 +157,9 @@ window.switchserialportID = 0;
         };
 
         this.onDispose = function () {
-			tabSwitchSerialPort[currentSettings.serialport] = -1;
+			for (var i = 0; i < arraySerialPort.length; i++) {				
+				tabSwitchSerialPort[arraySerialPort[i]] = -1;
+			}
         };
 
         this.getHeight = function () {
@@ -149,11 +171,13 @@ window.switchserialportID = 0;
         
 		function checkIsOpen(refreshTime) {
 			updateTimer = setInterval(function () {
-				if (tabSerialPortIsOpen[currentSettings.serialport] == true) {
-					($( "#" + thisswitchserialportID + "-serialportonoff" )).prop("checked", true);
-				}
-				else {
-					($( "#" + thisswitchserialportID + "-serialportonoff" )).prop("checked", false);
+				for (var i = 0; i < arraySerialPort.length; i++) {				
+					if (tabSerialPortIsOpen[arraySerialPort[i]] == true) {
+						($( "#" + thisswitchserialportID + "-serialportonoff" )).prop("checked", true);
+					}
+					else {
+						($( "#" + thisswitchserialportID + "-serialportonoff" )).prop("checked", false);
+					}
 				}
 			}, refreshTime);
 		}
@@ -196,27 +220,51 @@ window.switchserialportID = 0;
             },
             {
                 name: "variable1",
-                display_name: _t("Variable #1"),
+                display_name: _t("Switch On Variable #1"),
                 type: "calculated",
 				description: _t("(Optional) Variable #1 to send when the serial port is switched on")
             },
             {
                 name: "value1",
-                display_name: _t('Value #1'),
+                display_name: _t('Switch On Value #1'),
                 type: "text",
-                description: _t('Value to send when the variable #1 is defined above')
+                description: _t('Value to send when the switch on variable #1 is defined above')
+            },
+            {
+                name: "switchoff_variable1",
+                display_name: _t("Switch Off Variable #1"),
+                type: "calculated",
+				description: _t("(Optional) Variable #1 to send when the serial port is switched off")
+            },
+            {
+                name: "switchoff_value1",
+                display_name: _t('Switch Off Value #1'),
+                type: "text",
+                description: _t('Value to send when the switch off variable #1 is defined above')
             },
             {
                 name: "variable2",
-                display_name: _t("Variable #2"),
+                display_name: _t("Switch On Variable #2"),
                 type: "calculated",
 				description: _t("(Optional) Variable #2 to send when the serial port is switched on")
             },
             {
                 name: "value2",
-                display_name: _t('Value #2'),
+                display_name: _t('Switch On Value #2'),
                 type: "text",
-                description: _t('Value to send when the variable #2 is defined above')
+                description: _t('Value to send when the switch on variable #2 is defined above')
+            },
+            {
+                name: "switchoff_variable2",
+                display_name: _t("Switch Off Variable #2"),
+                type: "calculated",
+				description: _t("(Optional) Variable #2 to send when the serial port is switched off")
+            },
+            {
+                name: "switchoff_value2",
+                display_name: _t('Switch Off Value #2'),
+                type: "text",
+                description: _t('Value to send when the switch off variable #2 is defined above')
             },
             {
                 name: "message",

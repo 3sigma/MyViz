@@ -15,6 +15,8 @@ translations["Load"] = "Ouvrir";
 translations["About T-Quad"] = "A propos de T-Quad";
 translations["Help"] = "Aide";
 translations["About MyViz"] = "A propos de Myviz";
+translations["Upgrade MyViz"] = "Mise à jour de Myviz";
+translations["This dashboard has been saved with a newer version of MyViz. It may not work as expected.\n\nIt is recommended to upgrade MyViz by clicking on Help -> Upgrade MyViz.\n\nIf you don't want to upgrade MyViz and if you don't want to see this message anymore, you can save this dashboard with your current version of MyViz."] = "Ce tableau de bord a été sauvegardé avec une version plus récente de MyViz. Il risque de ne pas fonctionner comme prévu.\n\nIl est conseillé de mettre MyViz à jour en cliquant sur Aide -> Mise à jour de Myviz.\n\nSi vous ne voulez pas mettre à jour MyViz et si vous ne voulez plus voir ce message, vous pouvez sauvegarder ce tableau de bord avec votre version actuelle.";
 translations["Tutorials"] = "Tutoriels";
 translations["Last opened: "] = "Dernier fichier ouvert: ";
 translations["Default (OS informations)"] = "Par défaut (informations de l'OS)";
@@ -97,7 +99,10 @@ translations["Initial value of the color"] = "Valeur initiale de la couleur";
 // extensions/csv.datasources.js
 translations["CSV File"] = "Fichier CSV";
 translations["Click into this text input in order to select the file."] = "Cliquez dans cette zone d'entrée textuelle pour choisir le fichier";
-translations["CSV file has a header"] = "Le fichier CSV a un en-tête";
+translations["Use header for variables to read"] = "Utiliser l'entête pour le nom des variables à lire";
+translations["Name of the variables to read (separated by comma), only in case you don't use header."] = "Noms des variables à lire (séparés par des virgules), uniquement dans le cas où l'en-tête n'est pas utilisé.";
+translations["Lines to skip"] = "Sauter des lignes";
+translations["Includes header."] = "Inclus l'en-tête.";
 
 // extensions/dweetio.datasources.js
 translations["Thing Name"] = "Nom de l'objet";
@@ -225,7 +230,7 @@ translations['Fill only if you chose "Column of datasource" above.'] = 'Remplir 
 translations["X stop value"] = "Valeur de fin en X";
 translations['X value at which the plot should stop. Put "inf" for continuous plot.'] = 'Valeur de X à laquelle arrêter le tracé. Mettre "inf" pour un tracé continu.';
 translations["Time Window"] = "Fenêtre temporelle";
-translations["Length of sliding time window"] = "Longueur de la fenêtre temporelle glissante";
+translations["Maximum length of sliding time window. It will be automatically decreased so that it does not display more than 500 points."] = "Longueur de la fenêtre temporelle glissante. Elle sera réduite automatiquement pour qu'elle n'affiche pas plus de 500 points.";
 translations["Left Y axis values"] = "Valeur de l'axe Y gauche";
 translations["Left Y axis minimum range"] = "Intervalle minimum sur l'axe Y gauche";
 translations["Right Y axis values"] = "Valeur de l'axe Y droit";
@@ -238,7 +243,7 @@ translations["Height Blocks"] = "Hauteur en nombre de blocs";
 translations["A height block is around 60 pixels"] = "La hauteur d'un bloc est environ 60 pixels";
 translations["Pausable"] = "Pausable";
 translations["Refresh Period"] = "Période de rafraîchissement";
-translations["Increase this value in case of rendering problems."] = "Augmenter cette valeur si votre ordinateur n'est pas assez rapide";
+translations["Increase this value in case of rendering problems with multiple plots."] = "Augmenter cette valeur si l'affichage est saccadé ou si vous tracez de nombreuses courbes.";
 translations["Mean value"] = "Valeur moyenne";
 translations["Legend on X axis"] = "Légende sur l'axe des abscisses";
 

@@ -10,6 +10,10 @@ window.textareaID = 0;
         var nbLines = 0;
         var numLines = 0;
         var currentFirstLineNumber = 1;
+        var trigDisplay = 0;
+        var trigDisplayInterval = 10;
+        var toDisplay = "";
+        var timeoutDisplay;
 	    
 		saveText = function(_thisref, event)
 		{
@@ -178,8 +182,27 @@ window.textareaID = 0;
 					currentFirstLineNumber++;
 					nbLines--;
 				}
-				textAreaElement.append('<span id="line' + numLines + '"><br />' + newValue + '</span>');
-				textAreaElement[0].scrollTop = textAreaElement[0].scrollHeight;
+
+				if (trigDisplay > trigDisplayInterval * newValue.length) {
+					clearTimeout(timeoutDisplay);
+					trigDisplay = 0;
+					textAreaElement.empty();
+					textAreaElement.append(toDisplay);
+					toDisplay = "";
+					textAreaElement[0].scrollTop = textAreaElement[0].scrollHeight;
+					timeoutDisplay = setTimeout(function() {
+							trigDisplay = 0;
+							textAreaElement.append(toDisplay);
+							toDisplay = "";
+							textAreaElement[0].scrollTop = textAreaElement[0].scrollHeight;
+						},
+						1000
+					);		
+				}
+				else {
+					toDisplay += '<span id="line' + numLines + '"><br />' + newValue + '</span>';
+					trigDisplay++;
+				}
 			}
 
         };

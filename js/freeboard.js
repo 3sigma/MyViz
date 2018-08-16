@@ -388,6 +388,11 @@ function FreeboardModel(datasourcePlugins, widgetPlugins, freeboardUI)
 	{
 		var panes = [];
 
+		var MyViz_version;
+		data = fs.readFileSync("config.json");
+    	dataObj = JSON.parse(data);
+    	MyViz_version = dataObj.version;
+
 		_.each(self.panes(), function(pane)
 		{
 			panes.push(pane.serialize());
@@ -401,7 +406,8 @@ function FreeboardModel(datasourcePlugins, widgetPlugins, freeboardUI)
 		});
 
 		return {
-			version     : SERIALIZATION_VERSION,
+			//version     : SERIALIZATION_VERSION,
+			version     : MyViz_version,
 			header_image: self.header_image(),
 			allow_edit  : self.allow_edit(),
 			plugins     : self.plugins(),
@@ -427,7 +433,18 @@ function FreeboardModel(datasourcePlugins, widgetPlugins, freeboardUI)
 			{
 				self.allow_edit(true);
 			}
+			
+			var MyViz_version;
+			var compareVersions = require('compare-versions');
+			data = fs.readFileSync("config.json");
+	    	dataObj = JSON.parse(data);
+	    	MyViz_version = dataObj.version;
+		
 			self.version = object.version || 0;
+			if ((self.version != 0) && (self.version != 1) && (compareVersions(String(self.version), String(MyViz_version)) > 0)) {
+				alert(_t("This dashboard has been saved with a newer version of MyViz. It may not work as expected.\n\nIt is recommended to upgrade MyViz by clicking on Help -> Upgrade MyViz.\n\nIf you don't want to upgrade MyViz and if you don't want to see this message anymore, you can save this dashboard with your current version of MyViz."));
+			}
+			
 			self.header_image(object.header_image);
 
 			_.each(object.datasources, function(datasourceConfig)
@@ -1361,7 +1378,7 @@ function PaneModel(theFreeboardModel, widgetPlugins) {
 		_.each(self.widgets(), function (widget) {
 			widgets.push(widget.serialize());
 		});
-
+		
 		return {
 			title: self.title(),
 			width: self.width(),

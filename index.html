@@ -90,6 +90,7 @@
 		var tabSwitchSerialPort = [];
 		var tabSerialPortIsOpen = [];
 		var tabButtonRefresh = [];
+		var staticData = [];
 		
     	
 		if (typeof(require) !== "undefined") {
@@ -167,6 +168,7 @@
 									}
 							);
 						}
+			            // console.log(port);
 			            // console.log(port.comName);
 			            // console.log(port.pnpId);
 			            // console.log(port.manufacturer);
@@ -574,7 +576,14 @@
 									});
 							  	}
 							});
+							item_Help_Upgrade = new gui.MenuItem({
+							  	label: _t("Upgrade MyViz"),
+							  	click: function() {
+									gui.Shell.openExternal('https://www.myviz.io/download');
+							  	}
+							});
 							submenu_Help.append(item_Help_About);
+							submenu_Help.append(item_Help_Upgrade);
 							
 							item_Help = new gui.MenuItem({
 							  	label: _t("Help")
@@ -797,6 +806,13 @@
 		}
 		waitForElement();
 	});
+	var win = nw.Window.get();
+	// win.on('close', function() {
+		// //this.hide(); // Pretend to be closed already
+		// console.log("We're closing...");
+		// alert("We're closing...");
+		// this.close(true); // then close it forcely
+	// });
 		
 		
 </script>

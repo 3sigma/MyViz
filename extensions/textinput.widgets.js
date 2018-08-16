@@ -13,18 +13,29 @@ window.textinputID = 0;
         var currentSettings = settings;
         var textinputValue = currentSettings.resetvalue;
         
+        var arrayVariable;
+        if (!Array.isArray(currentSettings.variable)) {
+        	arrayVariable = [currentSettings.variable];
+        }
+        else {
+        	arrayVariable = currentSettings.variable;
+        }
+        
 
  		function sendData() {
 			// Store message in session storage
-			toSend = {};
-			var formula = (_.isUndefined(currentSettings.formula) ? "x" : currentSettings.formula);
-			if ($.isNumeric(textinputValue)) {
-				toSend[currentSettings.variable] = eval(formula.replace("x", textinputValue));
+			for (var i = 0; i < arrayVariable.length; i++) {
+				toSend = {};
+				var formula = (_.isUndefined(currentSettings.formula) ? "x" : currentSettings.formula);
+				if ($.isNumeric(textinputValue)) {
+					toSend[arrayVariable[i]] = eval(formula.replace("x", textinputValue));
+				}
+				else {
+					toSend[arrayVariable[i]] = textinputValue;
+				}
+				//console.log(arrayVariable);
+				sessionStorage.setItem(arrayVariable[i], toSend[arrayVariable[i]]);
 			}
-			else {
-				toSend[currentSettings.variable] = textinputValue;
-			}
-			sessionStorage.setItem(currentSettings.variable, toSend[currentSettings.variable]);
  		};
  		        
         function createTextInput(mySettings) {
@@ -72,9 +83,17 @@ window.textinputID = 0;
             	|| newSettings.max != currentSettings.max 
             	|| newSettings.resetcaption != currentSettings.resetcaption 
             	|| newSettings.formula != currentSettings.formula 
+            	|| newSettings.variable != currentSettings.variable 
             	|| newSettings.resetvalue != currentSettings.resetvalue) {
             		
                 
+        		if (!Array.isArray(newSettings.variable)) {
+		        	arrayVariable = [newSettings.variable];
+		        }
+		        else {
+		        	arrayVariable = newSettings.variable;
+		        }
+		        
                 createTextInput(newSettings);
                 // Rafraichissement de l'envoi des données
                 currentSettings.formula = newSettings.formula;
@@ -123,6 +142,7 @@ window.textinputID = 0;
                 name: "variable",
                 display_name: _t("Variable"),
                 type: "calculated",
+                multi_input: "true"
             },
             {
                 name: "formula",

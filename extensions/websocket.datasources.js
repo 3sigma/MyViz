@@ -7,8 +7,7 @@
 		var ws;
 		var newMessageCallback;
 		var refreshInterval;
-		var lastSentTime = 0;
-		var currentTime = new Date();
+		//var parse = require('fast-json-parse');
 		
 		var listVariablesToSend = (_.isUndefined(currentSettings.variables_to_send) ? "" : currentSettings.variables_to_send).split(",");
 		// Object with keys from list of variables to send, each value is 0
@@ -17,8 +16,9 @@
 		myName = updateCallback(newDataToSend);
 				
 		function onNewMessageHandler(msg) {
-			//console.log("msg: ", msg);
+			//console.log("msg.data: ", msg.data);
         	newData = JSON.parse(msg.data);
+        	//newData = parse(msg.data);
 			//console.log("newData: ", newData);
 			        
 	        // Add the variables to send
@@ -44,6 +44,13 @@
 	        
 			ws.onopen = function() {
 				console.info("Connected to server at: %s", url);
+				// The part below is a must in order to close properly
+				// the websocket when the MyViz window is closed
+				win.on('close', function() {
+				    ws.onclose = function () {}; // disable onclose handler first
+				    ws.close();
+				    this.close(true);
+				});
 			};
 			
             ws.onclose = function()
@@ -106,6 +113,8 @@
 		
 		function readSessionStorage() {
 			//console.log("Read session storage from ", myName);
+			//var t0 = performance.now();
+			
 			var currentObj = {};
         	for (var i=0; i<listVariablesToSend.length; i++) {
     			item = 'datasources["' + myName + '"]["' + listVariablesToSend[i] + '"]';
@@ -133,6 +142,10 @@
 			$.extend(dataObj, {'_crc':crcValue});
 			
 			sendData(dataObj);
+			
+			// var t1 = performance.now();
+			// console.log("Call to function took " + (t1 - t0) + " milliseconds.");
+
 
 			setTimeout(function() {
 					readSessionStorage();
